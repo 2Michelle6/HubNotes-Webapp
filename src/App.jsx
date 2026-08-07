@@ -6,10 +6,12 @@ import Courses from './pages/Courses';
 import CourseDetail from './pages/CourseDetail';
 import Tasks from './pages/Tasks';
 import Inventory from './pages/Inventory';
+import DeckDetail from './pages/DeckDetail';
+import { StudyProvider } from './data/StudyData';
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <StudyProvider><BrowserRouter>
       <Routes>
         {/* Landing page without sidebar */}
         <Route path="/" element={<Landing />} />
@@ -20,12 +22,13 @@ export default function App() {
           <Route path="/courses" element={<Courses />} />
           <Route path="/courses/:id" element={<CourseDetail />} />
           <Route path="/tasks" element={<Tasks />} />
+          <Route path="/decks/:courseId/:deckId" element={<DeckDetail />} />
           <Route path="/inventory" element={<Inventory />} />
         </Route>
 
         {/* Fallback route */}
         <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>
-    </BrowserRouter>
+    </BrowserRouter></StudyProvider>
   );
 }

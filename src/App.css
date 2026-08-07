@@ -27,7 +27,8 @@ body {
 }
 
 button,
-input {
+input,
+textarea {
   font: inherit;
 }
 
@@ -391,6 +392,62 @@ input {
   font-size: clamp(1.5rem, 4vw, 2.2rem);
 }
 
+/* Study workspace */
+.content-page { max-width: 1180px; margin: 0 auto; }
+.page-heading { margin-bottom: 2rem; }
+.page-heading .eyebrow-badge { margin-bottom: .7rem; }
+.page-heading h1 { margin: 0; font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.05; }
+.page-heading > p:last-child { margin: .7rem 0 0; color: #5f5554; font-size: 1.05rem; }
+.course-grid, .deck-list, .card-editor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(245px, 1fr)); gap: 1.35rem; }
+.course-card, .deck-card, .section-card, .note-card, .profile-card, .flashcard-editor { border: 3px solid var(--ink); border-radius: 16px; background: var(--bg-card); box-shadow: 5px 5px 0 var(--shadow-dark); }
+.course-card { display: flex; min-height: 245px; flex-direction: column; align-items: flex-start; padding: 1.4rem; }
+.course-card p, .deck-course { margin: 0 0 .45rem; color: var(--muted-purple); font-family: var(--font-display); font-size: .82rem; font-weight: bold; letter-spacing: .08em; text-transform: uppercase; }
+.course-card h2, .deck-card h3, .section-card h2, .profile-card h2 { margin: 0; font-family: var(--font-display); }
+.course-card span { margin: .5rem 0 1.3rem; }
+.course-card .btn-brutal { margin-top: auto; }
+.section-card { padding: 1.3rem; }
+.section-label { display: block; margin-bottom: .6rem; font-family: var(--font-display); font-weight: bold; }
+.overview-input, .note-body, .card-modal textarea, .flashcard-editor textarea { min-height: 100px; resize: vertical; }
+.content-section { margin-top: 2.5rem; }
+.section-title { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+.section-title h2 { margin: 0; font-family: var(--font-display); font-size: 1.55rem; }
+.section-title > span { font-family: var(--font-display); }
+.notes-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; }
+.note-card { padding: 1rem; }
+.note-title { width: 100%; margin-bottom: .8rem; padding: .25rem 0 .45rem; border: 0; border-bottom: 2px solid var(--ink); background: transparent; font-family: var(--font-display); font-size: 1.1rem; font-weight: bold; }
+.note-title:focus { outline: 2px solid var(--slate-gray); outline-offset: 3px; }
+.note-body { width: 100%; min-height: 150px; padding: .75rem; border: 2px solid var(--ink); border-radius: 8px; background: #fff; resize: vertical; }
+.empty-text { margin: 0; padding: 1rem; border: 2px dashed var(--ink); border-radius: 10px; }
+.deck-card { padding: 1.15rem; }
+.deck-card h3 { font-size: 1.3rem; }
+.deck-card > p:not(.deck-course) { margin: .5rem 0 1rem; }
+.deck-actions { display: flex; align-items: center; gap: .65rem; }
+.compact-btn { padding: 9px 12px; border-width: 2px; box-shadow: 3px 3px 0 var(--ink); }
+.icon-button { display: inline-grid; width: 38px; height: 38px; place-items: center; border: 2px solid var(--ink); border-radius: 9px; background: var(--bg-card); box-shadow: 3px 3px 0 var(--ink); color: var(--ink); cursor: pointer; text-decoration: none; }
+.icon-button:hover { background: var(--accent-lime); transform: translate(-1px, -1px); }
+.modal-backdrop { position: fixed; z-index: 10; inset: 0; display: grid; place-items: center; padding: 1rem; background: rgb(56 56 56 / 55%); }
+.card-modal { position: relative; display: grid; width: min(100%, 520px); gap: 1rem; padding: 2rem; border: 3px solid var(--ink); border-radius: 18px; background: var(--bg-card); box-shadow: 8px 8px 0 var(--ink); }
+.card-modal h2 { margin: 0; font-family: var(--font-display); }
+.card-modal label, .flashcard-editor label { display: grid; gap: .45rem; font-family: var(--font-display); font-size: .9rem; font-weight: bold; }
+.modal-close { position: absolute; top: .9rem; right: .9rem; }
+.card-editor-grid { margin-top: 2rem; }
+.flashcard-editor { display: grid; gap: .85rem; padding: 1rem; }
+.flashcard-editor > span { color: var(--muted-purple); font-family: var(--font-display); font-size: .8rem; font-weight: bold; text-transform: uppercase; }
+.profile-card { display: flex; align-items: center; gap: 1.4rem; padding: 1.4rem; }
+.profile-card p { margin-bottom: 0; }
+.avatar-wrap { position: relative; flex: 0 0 auto; }
+.profile-image, .profile-placeholder { display: grid; width: 104px; height: 104px; place-items: center; border: 3px solid var(--ink); border-radius: 50%; background: var(--accent-lime); object-fit: cover; font-family: var(--font-display); font-size: 2rem; }
+.avatar-button { position: absolute; right: -4px; bottom: -3px; display: grid; width: 32px; height: 32px; place-items: center; border: 2px solid var(--ink); border-radius: 50%; background: var(--slate-gray); color: #fff; box-shadow: 2px 2px 0 var(--ink); cursor: pointer; }
+.avatar-button input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.home-page .section-card { display: flex; align-items: center; gap: 1rem; margin-top: 1.6rem; }
+.home-page .section-card p { margin-bottom: 0; }
+
+/* Course detail makes room for editing. */
+.app-shell--course .app-sidebar { width: 78px; padding: 1.25rem .8rem; }
+.app-shell--course .sidebar-brand { justify-content: center; }
+.app-shell--course .sidebar-brand h2, .app-shell--course .sidebar-link span { display: none; }
+.app-shell--course .sidebar-link { justify-content: center; padding: .8rem; }
+
 @media (max-width: 850px) {
   .landing-hero-grid {
     grid-template-columns: 1fr;
@@ -421,6 +478,10 @@ input {
   .app-main {
     padding: 1.5rem;
   }
+
+  .app-shell--course .app-sidebar { width: 100%; padding: 1rem; }
+  .app-shell--course .sidebar-brand { display: none; }
+  .app-shell--course .sidebar-link { width: 46px; }
 }
 
 @media (max-width: 650px) {

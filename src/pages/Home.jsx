@@ -1,3 +1,4 @@
-export default function Home() {
-  return <h2>Welcome to HubNotes</h2>;
-}
+import { useEffect, useState } from 'react';
+import { Camera, BookOpen } from 'lucide-react';
+import { useStudyData } from '../data/StudyData';
+export default function Home() { const { courses } = useStudyData(); const [image, setImage] = useState(() => localStorage.getItem('hubnotes-profile-image') || ''); useEffect(() => localStorage.setItem('hubnotes-profile-image', image), [image]); const selectImage = (event) => { const file = event.target.files?.[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => setImage(String(reader.result)); reader.readAsDataURL(file); }; return <section className="content-page home-page"><div className="page-heading"><p className="eyebrow-badge">Welcome back</p><h1>Ready to level up?</h1></div><section className="profile-card"><div className="avatar-wrap">{image ? <img src={image} className="profile-image" alt="Your profile" /> : <span className="profile-placeholder">HN</span>}<label className="avatar-button" title="Choose profile image"><Camera size={16} /><input type="file" accept="image/*" onChange={selectImage} /></label></div><div><h2>My profile</h2><p>Keep your study space personal. Select the camera to add or change your image.</p></div></section><section className="section-card"><BookOpen size={22} /><div><h2>{courses.length} courses in progress</h2><p>Open Courses to add notes or work with your active decks.</p></div></section></section>; }

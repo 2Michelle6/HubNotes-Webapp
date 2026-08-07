@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
-
-export default function CourseDetail() {
-  const { id } = useParams();
-  return <h2>Course View: {id}</h2>;
-}
+import { Plus } from 'lucide-react';
+import DeckList from '../components/DeckList';
+import { useStudyData } from '../data/StudyData';
+export default function CourseDetail() { const { id } = useParams(); const { courses, updateCourse, updateNote, addNote } = useStudyData(); const course = courses.find((item) => item.id === id); if (!course) return <h2>Course not found.</h2>; return <section className="content-page course-detail"><div className="page-heading"><p className="eyebrow-badge">{course.code}</p><h1>{course.title}</h1></div><section className="section-card"><label className="section-label" htmlFor="overview">Course overview</label><textarea id="overview" className="brutal-input overview-input" value={course.overview} onChange={(event) => updateCourse(course.id, { overview: event.target.value })} /></section><section className="content-section"><div className="section-title"><h2>Notes</h2><button className="btn-brutal btn-primary compact-btn" onClick={() => addNote(course.id)}><Plus size={17} /> Add note</button></div><div className="notes-list">{course.notes.map((note) => <article className="note-card" key={note.id}><input className="note-title" value={note.title} onChange={(event) => updateNote(course.id, note.id, { title: event.target.value })} aria-label="Note title" /><textarea className="note-body" value={note.body} onChange={(event) => updateNote(course.id, note.id, { body: event.target.value })} placeholder="Write your note…" /></article>)}{course.notes.length === 0 && <p className="empty-text">Add your first note for this course.</p>}</div></section><section className="content-section"><div className="section-title"><h2>Active decks</h2><span>{course.decks.length} deck{course.decks.length === 1 ? '' : 's'}</span></div><DeckList course={course} /></section></section>; }
