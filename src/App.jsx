@@ -21,7 +21,8 @@ export default function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/courses/:id" element={<CourseDetail />} />
-          <Route path="/tasks" element={<Tasks />} />
+          <Route path="/decks" element={<Tasks />} />
+          <Route path="/tasks" element={<Navigate to="/decks" replace />} />
           <Route path="/decks/:courseId/:deckId" element={<DeckDetail />} />
           <Route path="/inventory" element={<Inventory />} />
         </Route>

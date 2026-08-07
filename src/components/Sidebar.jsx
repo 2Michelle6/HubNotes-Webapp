@@ -1,14 +1,18 @@
-import { NavLink } from 'react-router-dom';
-import { BookOpen, CheckSquare, Home, Package } from 'lucide-react';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { BookOpen, Layers, Home, LogOut, Package } from 'lucide-react';
 import logoIcon from '../assets/logonobg.png';
 
 export default function Sidebar() {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
   const navItems = [
     { name: 'Home', path: '/home', icon: Home },
     { name: 'Courses', path: '/courses', icon: BookOpen },
-    { name: 'Tasks', path: '/tasks', icon: CheckSquare },
+    { name: 'Decks', path: '/decks', icon: Layers },
     { name: 'Inventory', path: '/inventory', icon: Package },
   ];
+
+  const showLogout = ['/home', '/courses', '/decks', '/inventory'].includes(pathname);
 
   return (
     <aside className="app-sidebar">
@@ -32,6 +36,7 @@ export default function Sidebar() {
           );
         })}
       </nav>
+      {showLogout && <button className="sidebar-logout" type="button" onClick={() => navigate('/', { replace: true })}><LogOut size={20} /><span>Log out</span></button>}
     </aside>
   );
 }

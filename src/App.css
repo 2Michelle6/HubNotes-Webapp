@@ -321,6 +321,8 @@ textarea {
 }
 
 .app-sidebar {
+  display: flex;
+  flex-direction: column;
   width: 250px;
   min-height: 100vh;
   padding: 1.5rem;
@@ -352,6 +354,25 @@ textarea {
   flex-direction: column;
   gap: 0.8rem;
 }
+
+.sidebar-logout {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: .75rem;
+  margin-top: auto;
+  padding: .8rem .9rem;
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 3px 3px 0 var(--shadow-dark);
+  color: var(--ink);
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-weight: bold;
+}
+
+.sidebar-logout:hover { background: #f85002; color: #fff; }
 
 .sidebar-link {
   display: flex;
@@ -481,6 +502,8 @@ textarea {
     flex-direction: row;
     flex-wrap: wrap;
   }
+
+  .sidebar-logout { width: auto; margin-top: 0; }
 
   .app-main {
     padding: 1.5rem;
