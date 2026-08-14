@@ -7,6 +7,7 @@ import CourseDetail from "./pages/CourseDetail";
 import Tasks from "./pages/Tasks";
 import Inventory from "./pages/Inventory";
 import DeckDetail from "./pages/DeckDetail";
+import GameSession from "./pages/GameSession";
 import { StudyProvider } from "./data/StudyData";
 
 export default function App() {
@@ -25,6 +26,7 @@ export default function App() {
             <Route path="/decks" element={<Tasks />} />
             <Route path="/tasks" element={<Navigate to="/decks" replace />} />
             <Route path="/decks/:courseId/:deckId" element={<DeckDetail />} />
+            <Route path="/play/:courseId/:deckId" element={<GameSession />} />
             <Route path="/inventory" element={<Inventory />} />
           </Route>
 

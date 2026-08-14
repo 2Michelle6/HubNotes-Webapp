@@ -136,6 +136,42 @@ export function StudyProvider({ children }) {
       ),
     });
   };
+  const recordGameSession = (courseId, deckId, result) => {
+    setCourses((items) =>
+      items.map((course) =>
+        course.id !== courseId
+          ? course
+          : {
+              ...course,
+              decks: course.decks.map((deck) => {
+                if (deck.id !== deckId) return deck;
+                const previousStats = deck.gameStats || {
+                  sessions: 0,
+                  coinsCollected: 0,
+                  correctAnswers: 0,
+                  incorrectAnswers: 0,
+                };
+                return {
+                  ...deck,
+                  gameStats: {
+                    sessions: previousStats.sessions + 1,
+                    coinsCollected:
+                      previousStats.coinsCollected +
+                      (result.coinsCollected || 0),
+                    correctAnswers:
+                      previousStats.correctAnswers +
+                      (result.correctAnswers || 0),
+                    incorrectAnswers:
+                      previousStats.incorrectAnswers +
+                      (result.incorrectAnswers || 0),
+                  },
+                  lastGameSession: result,
+                };
+              }),
+            },
+      ),
+    );
+  };
   return (
     <StudyDataContext.Provider
       value={{
@@ -148,6 +184,7 @@ export function StudyProvider({ children }) {
         addDeck,
         addCard,
         updateCard,
+        recordGameSession,
       }}
     >
       {children}

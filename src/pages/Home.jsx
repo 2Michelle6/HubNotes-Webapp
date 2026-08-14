@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Camera, Flame, Gamepad2, Plus, Search } from "lucide-react";
 import { useStudyData } from "../data/StudyData";
+import { useNavigate } from "react-router-dom";
 export default function Home() {
   const { courses } = useStudyData();
+  const navigate = useNavigate();
   const [image, setImage] = useState(
     () => localStorage.getItem("hubnotes-profile-image") || "",
   );
@@ -90,7 +92,10 @@ export default function Home() {
                 </div>
                 <div className="deck-card-actions">
                   <button className="btn-neo btn-orange">Review</button>
-                  <button className="btn-neo btn-primary">
+                  <button
+                    className="btn-neo btn-primary"
+                    onClick={() => navigate(`/play/${course.id}/${deck.id}`)}
+                  >
                     <Gamepad2 size={15} /> Play Game
                   </button>
                 </div>

@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Pencil, Play, Plus } from "lucide-react";
 import CardModal from "./CardModal";
 import { useStudyData } from "../data/StudyData";
 
 export default function DeckList({ course, showCourseName = false }) {
   const { addCard } = useStudyData();
+  const navigate = useNavigate();
   const [activeDeck, setActiveDeck] = useState(null);
   return (
     <>
@@ -27,11 +28,7 @@ export default function DeckList({ course, showCourseName = false }) {
               <button
                 className="btn-brutal btn-primary compact-btn"
                 type="button"
-                onClick={() =>
-                  window.alert(
-                    `Study mode for ${deck.title} is ready for your next session.`,
-                  )
-                }
+                onClick={() => navigate(`/play/${course.id}/${deck.id}`)}
               >
                 <Play size={16} /> Play
               </button>
