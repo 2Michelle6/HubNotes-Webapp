@@ -1,4 +1,18 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import {
+  ACTIVITY_TYPES,
+  ACTIVITY_STORAGE_KEY,
+  getEventPoints,
+  getLocalDateKey,
+  MAX_ACTIVITY_EVENTS,
+  readActivity,
+} from "./activity";
 
 const StudyDataContext = createContext();
 const initialCourses = [
@@ -56,9 +70,35 @@ function readCourses() {
 
 export function StudyProvider({ children }) {
   const [courses, setCourses] = useState(readCourses);
+  const [activity, setActivity] = useState(readActivity);
   useEffect(
     () => localStorage.setItem("hubnotes-courses", JSON.stringify(courses)),
     [courses],
+  );
+  useEffect(
+    () => localStorage.setItem(ACTIVITY_STORAGE_KEY, JSON.stringify(activity)),
+    [activity],
+  );
+  const recordActivity = useCallback(
+    ({ type, courseId, deckId, cardId, details = {} }) => {
+      const now = new Date();
+      const event = {
+        id: newId(),
+        type,
+        occurredAt: now.toISOString(),
+        date: getLocalDateKey(now),
+        ...(courseId ? { courseId } : {}),
+        ...(deckId ? { deckId } : {}),
+        ...(cardId ? { cardId } : {}),
+        ...(Object.keys(details).length ? { details } : {}),
+        points: getEventPoints(type, details),
+      };
+      setActivity((current) => ({
+        events: [...current.events, event].slice(-MAX_ACTIVITY_EVENTS),
+      }));
+      return event;
+    },
+    [],
   );
   const updateCourse = (courseId, changes) =>
     setCourses((items) =>
@@ -113,12 +153,19 @@ export function StudyProvider({ children }) {
   };
   const addCard = (courseId, deckId, card) => {
     const course = courses.find((item) => item.id === courseId);
+    const cardId = newId();
     updateCourse(courseId, {
       decks: course.decks.map((deck) =>
         deck.id === deckId
-          ? { ...deck, cards: [...deck.cards, { ...card, id: newId() }] }
+          ? { ...deck, cards: [...deck.cards, { ...card, id: cardId }] }
           : deck,
       ),
+    });
+    recordActivity({
+      type: ACTIVITY_TYPES.CARD_CREATED,
+      courseId,
+      deckId,
+      cardId,
     });
   };
   const updateCard = (courseId, deckId, cardId, changes) => {
@@ -171,11 +218,61 @@ export function StudyProvider({ children }) {
             },
       ),
     );
+    const cardResults = Array.isArray(result.cardResults)
+      ? result.cardResults
+      : [];
+    cardResults.forEach((cardResult) =>
+      recordActivity({
+        type: ACTIVITY_TYPES.CARD_ANSWERED,
+        courseId,
+        deckId,
+        cardId: cardResult.cardId,
+        details: { correct: Boolean(cardResult.correct) },
+      }),
+    );
+    recordActivity({
+      type: ACTIVITY_TYPES.GAME_COMPLETED,
+      courseId,
+      deckId,
+      details: {
+        correctAnswers: result.correctAnswers || 0,
+        incorrectAnswers: result.incorrectAnswers || 0,
+      },
+    });
+    const deck = courses
+      .find((course) => course.id === courseId)
+      ?.decks.find((item) => item.id === deckId);
+    if (
+      deck?.cards.length &&
+      (result.questionsAnswered || 0) >= deck.cards.length
+    ) {
+      recordActivity({
+        type: ACTIVITY_TYPES.DECK_COMPLETED,
+        courseId,
+        deckId,
+      });
+    }
   };
+  const recordCourseVisit = useCallback(
+    (courseId) =>
+      recordActivity({ type: ACTIVITY_TYPES.COURSE_VISIT, courseId }),
+    [recordActivity],
+  );
+  const recordDeckVisit = useCallback(
+    (courseId, deckId) =>
+      recordActivity({ type: ACTIVITY_TYPES.DECK_VISIT, courseId, deckId }),
+    [recordActivity],
+  );
+  const recordGameStarted = useCallback(
+    (courseId, deckId) =>
+      recordActivity({ type: ACTIVITY_TYPES.GAME_STARTED, courseId, deckId }),
+    [recordActivity],
+  );
   return (
     <StudyDataContext.Provider
       value={{
         courses,
+        activityEvents: activity.events,
         updateCourse,
         createCourse,
         deleteCourse,
@@ -185,6 +282,9 @@ export function StudyProvider({ children }) {
         addCard,
         updateCard,
         recordGameSession,
+        recordCourseVisit,
+        recordDeckVisit,
+        recordGameStarted,
       }}
     >
       {children}

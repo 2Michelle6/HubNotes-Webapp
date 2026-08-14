@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Plus } from "lucide-react";
 import CardModal from "../components/CardModal";
 import { useStudyData } from "../data/StudyData";
 export default function DeckDetail() {
   const { courseId, deckId } = useParams();
-  const { courses, addCard, updateCard } = useStudyData();
+  const { courses, addCard, updateCard, recordDeckVisit } = useStudyData();
   const [isAdding, setIsAdding] = useState(false);
   const course = courses.find((item) => item.id === courseId);
   const deck = course?.decks.find((item) => item.id === deckId);
+  useEffect(() => {
+    recordDeckVisit(courseId, deckId);
+  }, [courseId, deckId, recordDeckVisit]);
   if (!deck) return <h2>Deck not found.</h2>;
   return (
     <section className="content-page">

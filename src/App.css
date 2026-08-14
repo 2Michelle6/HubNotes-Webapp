@@ -918,6 +918,179 @@ textarea {
   font-size: 0.8rem;
 }
 
+.activity-card,
+.recent-list-card {
+  border: 3px solid var(--ink);
+  border-radius: 16px;
+  background: #faf8f9;
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.activity-card {
+  margin-top: 1.5rem;
+  padding: 1.1rem 1.2rem;
+}
+
+.activity-card-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.activity-card h2,
+.recent-list-card h3 {
+  margin: 0;
+  font-family: var(--font-display);
+}
+
+.activity-card p,
+.activity-card-heading > span {
+  margin: 0.25rem 0 0;
+  color: #675f63;
+  font-size: 0.85rem;
+}
+
+.activity-card-heading > span {
+  padding: 0.25rem 0.45rem;
+  border: 1px solid var(--ink);
+  border-radius: 6px;
+  background: #eff5cb;
+  font-family: var(--font-display);
+  white-space: nowrap;
+}
+
+.heatmap-wrap {
+  display: flex;
+  gap: 0.55rem;
+  margin-top: 1rem;
+  overflow-x: auto;
+}
+
+.heatmap-day-labels {
+  display: grid;
+  grid-template-rows: repeat(7, 12px);
+  gap: 4px;
+  padding-top: 1px;
+  color: #675f63;
+  font: 700 0.58rem var(--font-display);
+}
+
+.heatmap-day-labels span:nth-child(1) {
+  grid-row: 1;
+}
+
+.heatmap-day-labels span:nth-child(2) {
+  grid-row: 3;
+}
+
+.heatmap-day-labels span:nth-child(3) {
+  grid-row: 5;
+}
+
+.activity-heatmap {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, 12px);
+  grid-template-columns: repeat(12, 12px);
+  gap: 4px;
+}
+
+.heatmap-cell {
+  width: 12px;
+  height: 12px;
+  border: 1px solid var(--ink);
+  border-radius: 3px;
+  background: #fff;
+}
+
+.heatmap-cell--1 {
+  background: #d5e6e1;
+}
+
+.heatmap-cell--2 {
+  background: #b9dd98;
+}
+
+.heatmap-cell--3 {
+  background: #77bc54;
+}
+
+.heatmap-cell--4 {
+  background: #078c20;
+}
+
+.recent-activity-section {
+  margin-top: 2rem;
+}
+
+.recent-activity-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.recent-list-card {
+  overflow: hidden;
+}
+
+.recent-list-card h3 {
+  padding: 0.8rem 1rem;
+  border-bottom: 2px solid var(--ink);
+  background: #d5e6e1;
+}
+
+.recent-list-card ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.recent-list-card li + li {
+  border-top: 1px solid var(--ink);
+}
+
+.recent-list-card li button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.8rem 1rem;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+}
+
+.recent-list-card li button:hover {
+  background: #eff5cb;
+}
+
+.recent-list-card li span {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.recent-list-card li strong {
+  font-family: var(--font-display);
+}
+
+.recent-list-card li small,
+.recent-list-card li time {
+  color: #675f63;
+  font-size: 0.76rem;
+}
+
+.recent-list-card li time {
+  white-space: nowrap;
+}
+
+.recent-list-card .empty-text {
+  margin: 1rem;
+}
+
 /* Study workspace */
 .content-page {
   max-width: 1180px;
@@ -1319,6 +1492,15 @@ textarea {
   }
   .app-shell--course .sidebar-link {
     width: 46px;
+  }
+
+  .recent-activity-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .activity-card-heading {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
 

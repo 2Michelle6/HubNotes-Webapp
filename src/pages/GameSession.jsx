@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import GodotGameFrame from "../components/GodotGameFrame";
@@ -8,11 +8,14 @@ import { createGameStartMessage } from "../game/gameProtocol";
 export default function GameSession() {
   const { courseId, deckId } = useParams();
   const navigate = useNavigate();
-  const { courses, recordGameSession } = useStudyData();
+  const { courses, recordDeckVisit, recordGameSession, recordGameStarted } =
+    useStudyData();
   const [sessionId] = useState(() => crypto.randomUUID());
   const [status, setStatus] = useState("Loading game...");
   const [error, setError] = useState("");
   const [result, setResult] = useState(null);
+  const gameStartedRef = useRef(false);
+  const gameCompletedRef = useRef(false);
   const course = courses.find((item) => item.id === courseId);
   const deck = course?.decks.find((item) => item.id === deckId);
 
@@ -31,11 +34,17 @@ export default function GameSession() {
       }
       if (message.type === "game.started") {
         setStatus("Collect coins to answer questions.");
+        if (!gameStartedRef.current) {
+          gameStartedRef.current = true;
+          recordGameStarted(courseId, deckId);
+        }
       }
       if (
         message.type === "game.completed" &&
-        message.sessionId === sessionId
+        message.sessionId === sessionId &&
+        !gameCompletedRef.current
       ) {
+        gameCompletedRef.current = true;
         setResult(message.result);
         setStatus("Study session complete");
         recordGameSession(courseId, deckId, {
@@ -45,8 +54,11 @@ export default function GameSession() {
         });
       }
     },
-    [courseId, deckId, recordGameSession, sessionId],
+    [courseId, deckId, recordGameSession, recordGameStarted, sessionId],
   );
+  useEffect(() => {
+    recordDeckVisit(courseId, deckId);
+  }, [courseId, deckId, recordDeckVisit]);
 
   if (!course || !deck) {
     return (

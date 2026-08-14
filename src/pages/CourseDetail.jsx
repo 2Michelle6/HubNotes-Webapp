@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft,
@@ -18,12 +18,22 @@ export default function CourseDetail() {
   const navigate = useNavigate();
   const imageInput = useRef(null);
   const fileInput = useRef(null);
-  const { courses, updateCourse, updateNote, addNote, addDeck, deleteCourse } =
-    useStudyData();
+  const {
+    courses,
+    updateCourse,
+    updateNote,
+    addNote,
+    addDeck,
+    deleteCourse,
+    recordCourseVisit,
+  } = useStudyData();
   const [editing, setEditing] = useState(false);
   const [files, setFiles] = useState([]);
   const [deckTitle, setDeckTitle] = useState("");
   const course = courses.find((item) => item.id === id);
+  useEffect(() => {
+    recordCourseVisit(id);
+  }, [id, recordCourseVisit]);
   if (!course) return <p>Course not found.</p>;
   const saveImage = (event) => {
     const file = event.target.files?.[0];
